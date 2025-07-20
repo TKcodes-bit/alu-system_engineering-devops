@@ -1,5 +1,4 @@
-#!/bin/bash
-
+#!/usr/binenv /bash
 # Update package list
 apt-get update -y
 
