@@ -1,0 +1,56 @@
+#!/bin/bash
+
+# Update package list
+apt-get update -y
+
+# Install nginx
+apt-get install nginx -y
+
+# Create a custom 404 HTML page with creativity and required phrase
+cat <<'EOF' > /var/www/html/custom_404.html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>404 - Ceci n'est pas une page</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f1626;
+            color: #ffffff;
+            text-align: center;
+            padding-top: 10%;
+        }
+        h1 {
+            font-size: 4em;
+            margin-bottom: 0;
+        }
+        p {
+            font-size: 1.5em;
+            color: #a1a1a1;
+        }
+        img {
+            margin-top: 40px;
+            width: 150px;
+        }
+        a {
+            color: #00d1b2;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>404 - Ceci n'est pas une page</h1>
+    <p>Like a Blizzard patch note, this page vanished into the void.</p>
+    <p>You could try <a href="/">respawning at home</a>, or keep debugging with GitHub!</p>
+    <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub logo">
+</body>
+</html>
+EOF
+
+# Configure nginx to use the custom 404 page
+sed -i '/server_name _;/a \\n    error_page 404 /custom_404.html;\n    location = /custom_404.html {\n        internal;\n    }' /etc/nginx/sites-available/default
+
+# Start nginx (avoid using systemctl)
+service nginx start
+
