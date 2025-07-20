@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Update package list
+apt-get update -y
+
+# Install nginx
+apt-get install nginx -y
+
+# Create custom redirect config inside the default server block
+sed -i '/location \/ {/a \\n    location /redirect_me {\n        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n    }' /etc/nginx/sites-available/default
+
+# Start nginx without systemctl
+service nginx start
+
